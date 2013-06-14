@@ -50,6 +50,8 @@ namespace sf3
         friend class Triangle;
         friend class Rectangle;
         friend class Polygon;
+        friend class Sprite;
+        friend class Square;
     };
 
 } // Namespace sf3

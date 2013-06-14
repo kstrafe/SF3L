@@ -22,37 +22,48 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef COLOR_HPP_INCLUDED
-#define COLOR_HPP_INCLUDED
+#ifndef LIGHT_HPP_INCLUDED
+#define LIGHT_HPP_INCLUDED
 
 // Program specific:
+#include "NocolVertex.hpp"
+#include "Movable.hpp"
+#include "Rotatable.hpp"
+#include "Colorable.hpp"
 
 // Utilities:
 
 // Standard Library components:
 
 // External libraries:
-#include <SFML/Graphics.hpp> // For sf::Color
+#include <SFML/Graphics.hpp>
+#include <SFML/OpenGL.hpp>
 
 // System specific includes:
+
 
 namespace sf3
 {
 
-    struct Color
+    class Light
+    :
+    public Movable,
+    public Rotatable,
+    public Colorable,
+    public sf::Drawable
     {
-        Color();
-        Color(const float red, const float green, const float blue, const float alpha = 1.f);
-        Color(const sf::Color &color);
-        Color(const Color &color);
-        ~Color();
+    public:
 
-        void operator=(const sf::Color &color);
-        void operator=(const Color &color);
+        Light();
+        ~Light();
 
-        float r, g, b, a;
+    private:
+
+        virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+
+        Color m_color;
     };
 
 } // Namespace sf3
 
-#endif // COLOR_HPP_INCLUDED
+#endif // LIGHT_HPP_INCLUDED

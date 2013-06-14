@@ -3,6 +3,9 @@
 
 // Program specific:
 #include "Vertex.hpp"
+#include "Movable.hpp"
+#include "Rotatable.hpp"
+#include "Colorable.hpp"
 
 // Utilities:
 
@@ -17,7 +20,12 @@
 namespace sf3
 {
 
-    class Rectangle : public sf::Drawable
+    class Rectangle
+    :
+    public sf::Drawable,
+    public Movable,
+    public Rotatable,
+    public Colorable
     {
     public:
 
@@ -26,37 +34,21 @@ namespace sf3
         ~Rectangle();
 
         void operator=(const Rectangle &rectangle);
-        Vertex &operator[](std::size_t pos);
 
-        void setPosition(sf::Vector3f position);
-        void setFillColor(sf::Color color);
+        Vertex &topLeft();
+        Vertex &topRight();
+        Vertex &bottomRight();
+        Vertex &bottomLeft();
 
-        void setTexture(sf::Texture &texture);
-        void setRepeated(sf::Vector2f st);
-        void setRepeated(bool state = true);
-
-        void setRotation(float angle);
-        void setRotation(float angle, sf::Vector3f dispersion);
-        void setRotation(sf::Vector3f dispersion);
-
-        void rotate(float angle);
-        void rotate(float angle, sf::Vector3f dispersion);
-        void rotate(sf::Vector3f dispersion);
-
+        virtual void setFillColor(const sf::Color &color);
+        virtual void setFillColor(const Color &color);
+        virtual const Color &getFillColor() const;
 
     private:
 
         virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
         Vertex m_vertices[4];
-        sf::Vector3f m_position;
-
-        sf::Texture *m_texture;
-        sf::Vector2f repetition;
-
-        float m_angle;
-        sf::Vector3f m_rotation;
-
     };
 
 } // Namespace sf3

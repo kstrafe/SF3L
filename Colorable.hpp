@@ -22,37 +22,39 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef COLOR_HPP_INCLUDED
-#define COLOR_HPP_INCLUDED
+#ifndef COLORABLE_HPP_INCLUDED
+#define COLORABLE_HPP_INCLUDED
 
 // Program specific:
+#include "Color.hpp"
 
 // Utilities:
 
 // Standard Library components:
 
 // External libraries:
-#include <SFML/Graphics.hpp> // For sf::Color
+#include <SFML/Graphics.hpp>
 
 // System specific includes:
 
 namespace sf3
 {
 
-    struct Color
+    class Colorable
     {
-        Color();
-        Color(const float red, const float green, const float blue, const float alpha = 1.f);
-        Color(const sf::Color &color);
-        Color(const Color &color);
-        ~Color();
+    public:
 
-        void operator=(const sf::Color &color);
-        void operator=(const Color &color);
+        Colorable();
+        virtual ~Colorable();
 
-        float r, g, b, a;
+        virtual void setFillColor(const sf::Color &color) = 0;
+        virtual void setFillColor(const Color &color) = 0;
+
+        virtual const Color &getFillColor() const = 0;
+
     };
 
 } // Namespace sf3
 
-#endif // COLOR_HPP_INCLUDED
+
+#endif // COLORABLE_HPP_INCLUDED
