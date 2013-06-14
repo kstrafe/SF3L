@@ -22,54 +22,67 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef LIGHT_HPP_INCLUDED
-#define LIGHT_HPP_INCLUDED
-
-// Program specific:
-#include "NocolVertex.hpp"
-#include "Movable.hpp"
-#include "Rotatable.hpp"
-#include "Colorable.hpp"
-
-// Utilities:
-
-// Standard Library components:
-
-// External libraries:
-#include <SFML/Graphics.hpp>
-#include <SFML/OpenGL.hpp>
-
-// System specific includes:
+#include "Sphere.hpp"
 
 
 namespace sf3
 {
 
-    class Light
+    Sphere::Sphere()
     :
-    public Movable,
-    public Rotatable,
-    public Colorable,
-    public sf::Drawable
+    m_radius(0.f),
+    m_display_list(glGenLists(1)),
+    m_quadric(gluNewQuadric())
     {
-    public:
+        std::cout << m_display_list << std::endl;
+    }
 
-        Light();
-        ~Light();
 
-        virtual void setFillColor(const sf::Color &color);
-        virtual void setFillColor(const Color &color);
+    Sphere::~Sphere()
+    {
+        gluDeleteQuadric(m_quadric);
+        glDeleteLists(m_display_list, 1);
+    }
 
-        virtual const Color &getFillColor() const;
 
-    private:
+    void Sphere::setRadius(const float radius)
+    {
+        m_radius = radius;
 
-        virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+        glNewList(m_display_list, GL_COMPILE);
+        gluSphere(m_quadric, m_radius, 30000000, 30000000);
+        glEndList();
+    }
 
-        Color m_color;
-        float m_angle;
-    };
+
+    const float Sphere::getRadius() const
+    {
+        return m_radius;
+    }
+
+
+    void Sphere::setFillColor(const Color &color)
+    {
+
+    }
+
+
+    void Sphere::setFillColor(const sf::Color &color)
+    {}
+
+
+    const Color &Sphere::getFillColor() const
+    {
+        return m_color;
+    }
+
+
+    void Sphere::draw(sf::RenderTarget &target, sf::RenderStates states) const
+    {
+        glPushMatrix();
+            glTranslatef(m_position.x, m_position.y, m_position.z);
+            glCallList(m_display_list);
+        glPopMatrix();
+    }
 
 } // Namespace sf3
-
-#endif // LIGHT_HPP_INCLUDED

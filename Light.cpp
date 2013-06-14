@@ -31,9 +31,10 @@ namespace sf3
     Light::Light()
     {
 //         Could be placed in a separate part of the program.
+//        Implies that the lighting used must be constructed in the same thread
         glEnable(GL_LIGHTING);
         glEnable(GL_LIGHT0);
-//        glEnable(GL_COLOR_MATERIAL);
+        glEnable(GL_COLOR_MATERIAL);
     }
 
 
@@ -41,12 +42,30 @@ namespace sf3
     {}
 
 
+    void Light::setFillColor(const sf::Color &color)
+    {
+        m_color = color;
+    }
+
+
+    void Light::setFillColor(const Color &color)
+    {
+        m_color = color;
+    }
+
+
+    const Color &Light::getFillColor() const
+    {
+        return std::ref(m_color);
+    }
+
+
     void Light::draw(sf::RenderTarget &target, sf::RenderStates states) const
     {
 //        glPushMatrix();
 //        glLoadIdentity();
 
-        float no_mat[] = {0.0f, 0.0f, 0.0f, 1.0f};
+        float no_mat[] = {-.1f, -.1f, -.1f, 1.0f};
         float mat_ambient[] = {0.7f, 0.7f, 0.7f, 1.0f};
         float mat_ambient_color[] = {0.8f, 0.8f, 0.2f, 1.0f};
         float mat_diffuse[] = {.1f, .5f, .8f, 1.0f};
@@ -57,11 +76,11 @@ namespace sf3
         float mat_emission[] = {0.3f, 0.2f, 0.2f, 0.0f};
         float mat_position[] = {m_position.x, m_position.y, m_position.z, 1.f};
 
-        glColor4f(1.f, 1.f, 1.f);
+        glColor4f(m_color.r, m_color.g, m_color.b, m_color.a);
 
 //        glLightf (GL_LIGHT1, GL_SPOT_CUTOFF, 15.f);
         glLightfv(GL_LIGHT0, GL_AMBIENT, no_mat);
-        glLightfv(GL_LIGHT0, GL_DIFFUSE, mat_diffuse);
+//        glLightfv(GL_LIGHT0, GL_DIFFUSE, mat_diffuse);
         glLightfv(GL_LIGHT0, GL_POSITION, mat_position);
 
         glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);

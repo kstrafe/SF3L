@@ -22,11 +22,10 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef LIGHT_HPP_INCLUDED
-#define LIGHT_HPP_INCLUDED
+#ifndef SPHERE_HPP_INCLUDED
+#define SPHERE_HPP_INCLUDED
 
 // Program specific:
-#include "NocolVertex.hpp"
 #include "Movable.hpp"
 #include "Rotatable.hpp"
 #include "Colorable.hpp"
@@ -34,18 +33,18 @@
 // Utilities:
 
 // Standard Library components:
+#include <iostream>
 
 // External libraries:
-#include <SFML/Graphics.hpp>
-#include <SFML/OpenGL.hpp>
+#include <SFML/Graphics.hpp> // For sf::Color
+#include <SFML/OpenGL.hpp> // For glCallLists
 
 // System specific includes:
-
 
 namespace sf3
 {
 
-    class Light
+    class Sphere
     :
     public Movable,
     public Rotatable,
@@ -54,22 +53,29 @@ namespace sf3
     {
     public:
 
-        Light();
-        ~Light();
+        Sphere();
+        ~Sphere();
 
-        virtual void setFillColor(const sf::Color &color);
+        void setRadius(const float radius);
+        const float getRadius() const;
+
         virtual void setFillColor(const Color &color);
+        virtual void setFillColor(const sf::Color &color);
 
         virtual const Color &getFillColor() const;
+
 
     private:
 
         virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
         Color m_color;
-        float m_angle;
+        float m_radius;
+        GLuint m_display_list;
+        GLUquadricObj *m_quadric;
     };
 
 } // Namespace sf3
 
-#endif // LIGHT_HPP_INCLUDED
+
+#endif // SPHERE_HPP_INCLUDED

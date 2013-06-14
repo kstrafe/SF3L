@@ -1,22 +1,41 @@
+////////////////////////////////////////////////////////////
+//
+// SF3L - Simple, Fast 3D Library
+// Copyright © 2013 Kevin R. Stravers (macocio@gmail.com)
+//
+// This software is provided 'as-is', without any express or implied warranty.
+// In no event will the authors be held liable for any damages arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it freely,
+// subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented;
+//    you must not claim that you wrote the original software.
+//    If you use this software in a product, an acknowledgment
+//    in the product documentation would be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such,
+//    and must not be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source distribution.
+//
+////////////////////////////////////////////////////////////
+
 #include "Mesh.hpp"
 
 namespace sf3
 {
 
     Mesh::Mesh()
-    :
-    m_position(sf::Vector3f(0.f, 0.f, 0.f)),
-    m_rotation_angle(0.f),
-    m_rotation(sf::Vector3f(0.f, 0.f, 0.f))
     {}
 
 
     Mesh::Mesh(const Mesh &mesh)
     :
-    m_triangles(mesh.m_triangles),
-    m_position(mesh.m_position),
-    m_rotation_angle(0.f),
-    m_rotation(sf::Vector3f(0.f, 0.f, 0.f))
+    m_drawables(mesh.m_drawables),
+    Movable(mesh.m_position),
+    Rotatable(mesh.m_angle, mesh.m_rotation)
     {}
 
 
@@ -26,81 +45,28 @@ namespace sf3
 
     void Mesh::operator=(const Mesh &mesh)
     {
-        m_triangles = mesh.m_triangles;
+        m_drawables = mesh.m_drawables;
         m_position = mesh.m_position;
-        m_rotation_angle = mesh.m_rotation_angle;
+        m_angle = mesh.m_angle;
         m_rotation = mesh.m_rotation;
     }
 
 
-    Triangle &Mesh::operator[](std::size_t pos)
+    sf::Drawable &Mesh::operator[](std::size_t pos)
     {
-        return std::ref(m_triangles[pos]);
+        return std::ref(*m_drawables[pos]);
     }
 
 
-    void Mesh::setPosition(sf::Vector3f position)
+    void Mesh::add(sf::Drawable &drawable)
     {
-        m_position = position;
-    }
-
-
-    sf::Vector3f Mesh::getPosition()
-    {
-        return m_position;
-    }
-
-
-    void Mesh::move(sf::Vector3f movement)
-    {
-        m_position += movement;
-    }
-
-
-    void Mesh::rotate(float angle)
-    {
-        m_rotation_angle += angle;
-    }
-
-
-    void Mesh::rotate(float angle, sf::Vector3f dispersion)
-    {
-        m_rotation_angle += angle;
-        m_rotation += dispersion;
-    }
-
-
-    void Mesh::setRotation(float angle)
-    {
-        m_rotation_angle = angle;
-    }
-
-
-    void Mesh::setRotation(float angle, sf::Vector3f dispersion)
-    {
-        m_rotation_angle = angle;
-        m_rotation = dispersion;
-    }
-
-
-    void Mesh::setFillColor(sf::Color color)
-    {
-        for (Triangle &triangle : m_triangles)
-        {
-            triangle.setFillColor(color);
-        }
-    }
-
-
-    void Mesh::add(const Triangle &triangle)
-    {
-        m_triangles.push_back(triangle);
+        m_drawables.push_back(&drawable);
     }
 
 
     void Mesh::erase(const std::size_t pos)
     {
-        m_triangles.erase(m_triangles.begin() + pos);
+        m_drawables.erase(m_drawables.begin() + pos);
     }
 
 
@@ -110,13 +76,13 @@ namespace sf3
 
         // Apply mesh's own transformations
         glTranslatef(m_position.x, m_position.y, m_position.z);
-        glRotatef(m_rotation_angle, m_rotation.x, m_rotation.y, m_rotation.z);
+        glRotatef(m_angle, m_rotation.x, m_rotation.y, m_rotation.z);
 
         // TODO: Insert glBegin(GL_TRIANGLES) here to increase draw speed.
 
         // Draws all triangles the mesh contains
-        for (const Triangle &triangle : m_triangles)
-            target.draw(triangle);
+        for (const sf::Drawable *drawable : m_drawables)
+            target.draw(*drawable);
 
         // TODO: Insert glEnd() (complimentary to glBegin(...)
 

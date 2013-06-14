@@ -15,12 +15,25 @@ My definition of Simple in SF3L:
 
 TODO:
 
+High priority:
+
+ - Finalize all polygon rendering and handling
+  - Utilize display lists -> Should changed positions force list recompilation? Nested Lists?
+ - Add gluQuadric object handlers (Using RAII)
+ - Add a view handler for the scene.
+
+Low priority:
+
+ - Work with per-vertex lighting: enabling/disabling system.
  - Insert 4-channel colors (RGBA) instead of 3-channel RGB
  - Finish the normal calculations for triangles and rectangles
  - Work on advanced lighting
  - Create quadric hierarchy
  - Add fog manager
- - Automate functionality, e.g. glEnable(GL_DEPTH_TEST) or glEnable(GL_LIGHTING);
 
 ... more coming, can't think of anything else right now...
+
+Done:
+
+Allow mesh to take all types of drawables.
 
