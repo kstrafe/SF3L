@@ -15,12 +15,12 @@ My definition of Simple in SF3L:
 
 TODO:
 
-Insert 4-channel colors (RGBA) instead of 3-channel RGB
-Finish the normal calculations for triangles and rectangles
-Work on advanced lighting
-Create quadric hierarchy
-Add fog manager
-Automate functionality, e.g. glEnable(GL_DEPTH_TEST) or glEnable(GL_LIGHTING);
+ - Insert 4-channel colors (RGBA) instead of 3-channel RGB
+ - Finish the normal calculations for triangles and rectangles
+ - Work on advanced lighting
+ - Create quadric hierarchy
+ - Add fog manager
+ - Automate functionality, e.g. glEnable(GL_DEPTH_TEST) or glEnable(GL_LIGHTING);
 
 ... more coming, can't think of anything else right now...
 
