@@ -22,8 +22,8 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef VERTEX_HPP_INCLUDED
-#define VERTEX_HPP_INCLUDED
+#ifndef LINE_HPP_INCLUDED
+#define LINE_HPP_INCLUDED
 
 ////////////////////////////////////////////////////////////
 // Headers
@@ -31,6 +31,7 @@
 
 // Program specific:
 #include "Movable.hpp"
+#include "Rotatable.hpp"
 #include "Colorable.hpp"
 #include "Color.hpp"
 
@@ -44,127 +45,121 @@
 
 // System specific includes:
 
-
 namespace sf3
 {
-    ////////////////////////////////////////////////////////////
-    /// \brief A single, colored point in space.
-    ///
-    ////////////////////////////////////////////////////////////
-    class Vertex
+
+    class Line
     :
     public Movable,
+    public Rotatable,
     public Colorable,
     public sf::Drawable
     {
     public:
 
-        ////////////////////////////////////////////////////////////
-        /// \brief Default constructor
-        ///
-        /// \param position     Position of the vertex, standard null
-        /// \param color        Color of the vertex, standard white
-        ///
-        ////////////////////////////////////////////////////////////
-        Vertex
-        (
-            sf::Vector3f position = sf::Vector3f(0.f, 0.f, 0.f),
-            sf::Color color = sf::Color(255, 255, 255)
-        );
+        Line();
+        ~Line();
 
         ////////////////////////////////////////////////////////////
-        /// \brief Copy constructor
-        ///
-        /// \param vertex     Vertex to copy data from
-        ///
-        ////////////////////////////////////////////////////////////
-        Vertex(const Vertex &vertex);
-
-        ////////////////////////////////////////////////////////////
-        /// \brief Assignment operator
-        ///
-        /// \param vertex     Vertex to copy data from
-        ///
-        ////////////////////////////////////////////////////////////
-        void operator=(const Vertex &vertex);
-
-        ////////////////////////////////////////////////////////////
-        /// \brief Copy constructor
-        ///
-        /// \param vertex     Vertex to copy data from
-        ///
-        ////////////////////////////////////////////////////////////
-        ~Vertex();
-
-        ////////////////////////////////////////////////////////////
-        /// \brief Change the color
-        ///
-        /// \param color     sf::Color to assign the vertex
-        ///
-        ////////////////////////////////////////////////////////////
-        virtual void setColor(const sf::Color &color) final override;
-
-        ////////////////////////////////////////////////////////////
-        /// \brief Change the color
-        ///
-        /// \param color     Color to assign the vertex
-        ///
-        ////////////////////////////////////////////////////////////
-        virtual void setColor(const Color &color) final override;
-
-        ////////////////////////////////////////////////////////////
-        /// \brief Fetch the color of the vertex
-        ///
-        /// \return Current color of the vertex
-        ///
-        ////////////////////////////////////////////////////////////
-        virtual const Color &getColor() const final override;
-
-        ////////////////////////////////////////////////////////////
-        /// \brief Move the vertex
-        ///
-        /// Essentially the same as vertex.setPosition(vertex.getPosition() + sf::Vector3f(...));
-        ///
-        /// \param offset     The value to add to the current position.
-        ///
+        /// \see Movable::move
         ////////////////////////////////////////////////////////////
         virtual void move(const sf::Vector3f &offset) final override;
 
         ////////////////////////////////////////////////////////////
-        /// \brief Set the position
-        ///
-        /// \param offset     Position to assign to the vertex
-        ///
+        /// \see Movable::setPosition
         ////////////////////////////////////////////////////////////
-        virtual void setPosition(const sf::Vector3f &offset) final override;
+        virtual void setPosition(const sf::Vector3f &value) final override;
+
+        ////////////////////////////////////////////////////////////
+        /// \see Movable::getPosition
+        ////////////////////////////////////////////////////////////
+        virtual const sf::Vector3f &getPosition() const final override;
+
+        ////////////////////////////////////////////////////////////
+        /// \see Colorable::setFillColor
+        ////////////////////////////////////////////////////////////
+        virtual void setFillColor(const sf::Color &color) final override;
+
+        ////////////////////////////////////////////////////////////
+        /// \see Colorable::setFillColor
+        ////////////////////////////////////////////////////////////
+        virtual void setFillColor(const Color &color) final override;
+
+        ////////////////////////////////////////////////////////////
+        /// \see Colorable::getFillColor
+        ////////////////////////////////////////////////////////////
+        virtual const Color &getFillColor() const final override;
+
+        ////////////////////////////////////////////////////////////
+        /// \see Rotatable::setRotation
+        ////////////////////////////////////////////////////////////
+        virtual void setRotation(const float angle) final override;
+
+        ////////////////////////////////////////////////////////////
+        /// \see Rotatable::setRotation
+        ////////////////////////////////////////////////////////////
+        virtual void setRotation(const float angle, const sf::Vector3f &dispersion) final override;
+
+        ////////////////////////////////////////////////////////////
+        /// \see Rotatable::setRotation
+        ////////////////////////////////////////////////////////////
+        virtual void setRotation(const sf::Vector3f &dispersion) final override;
+
+        ////////////////////////////////////////////////////////////
+        /// \see Rotatable::rotate
+        ////////////////////////////////////////////////////////////
+        virtual void rotate(const float angle) final override;
+
+        ////////////////////////////////////////////////////////////
+        /// \see Rotatable::rotate
+        ////////////////////////////////////////////////////////////
+        virtual void rotate(const float angle, const sf::Vector3f &dispersion) final override;
+
+        ////////////////////////////////////////////////////////////
+        /// \see Rotatable::rotate
+        ////////////////////////////////////////////////////////////
+        virtual void rotate(const sf::Vector3f &dispersion) final override;
+
+        void setPointAColor(const Color &color);
+        void setPointBColor(const Color &color);
+
+        void setPointAPosition(const sf::Vector3f &value);
+        void setPointBPosition(const sf::Vector3f &value);
+
+
+        void setLineWidth(float width);
+        const float getLineWidth() const;
+
 
     private:
 
         ////////////////////////////////////////////////////////////
-        /// \brief Draw to the specified target
-        ///
-        /// \param target       Target to draw to, texture or screen
-        /// \param states       The state of the rendering context
-        ///
+        /// \see Vertex::draw
         ////////////////////////////////////////////////////////////
         virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const final override;
 
         ////////////////////////////////////////////////////////////
         // Member data
         ////////////////////////////////////////////////////////////
-        sf3::Color m_color; ///< Color of the vertex
-        GLuint m_displist; ///< Nested display list for fast drawing
-        static constexpr std::size_t cm_display_list_amount = 2; ///< Amount of display lists needed
-        static constexpr GLuint cm_position = 0, cm_color = 1; ///< Display list offsets
+        sf::Vector3f m_point[2]; ///< Positions of both points in model space
+        Color m_color[2]; ///< Colors for both points
+        GLuint m_displist; ///< Amount of display lists
+        GLfloat m_width; ///< Width of the line
 
-        friend class Triangle;
-        friend class Rectangle;
-        friend class Polygon;
-        friend class Sprite;
-        friend class Square;
+        static constexpr std::size_t cm_display_list_amount = 8;
+        static constexpr GLuint
+            cm_begin_end_wrap = 0,
+            cm_line_width = 1,
+            cm_color_1 = 2,
+            cm_position_1 = 3,
+            cm_color_2 = 4,
+            cm_position_2 = 5,
+            cm_translation = 6,
+            cm_rotation = 7;
+
     };
 
 } // Namespace sf3
 
 
-#endif // VERTEX_HPP_INCLUDED
+#endif // LINE_HPP_INCLUDED

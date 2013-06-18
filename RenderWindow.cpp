@@ -22,51 +22,64 @@
 //
 ////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////
-// Headers
-////////////////////////////////////////////////////////////
-#include "Colorable.hpp"
+#include "RenderWindow.hpp"
 
 
 namespace sf3
 {
 
-    ////////////////////////////////////////////////////////////
-    Colorable::Colorable(const Color &color)
-    {}
-
-    ////////////////////////////////////////////////////////////
-    Colorable::~Colorable()
-    {}
-
-    ////////////////////////////////////////////////////////////
-    void Colorable::setColor(const sf::Color &color)
-    {}
-
-    ////////////////////////////////////////////////////////////
-    void Colorable::setColor(const Color &color)
-    {}
-
-    ////////////////////////////////////////////////////////////
-    const Color &Colorable::getColor() const
-    {}
-
-    ////////////////////////////////////////////////////////////
-    void Colorable::setFillColor(const sf::Color &color)
+    RenderWindow::RenderWindow()
     {
-        setColor(color);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+        // Depth clearing and testing:
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LEQUAL);
+        glClearDepth(1.0f);
+
+
+//        glShadeModel(GL_SMOOTH);
+
+        // Setting the matrix and perspective:
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluPerspective(45.0f,(GLfloat)800/(GLfloat)600,0.1f,100.0f);
+        glMatrixMode(GL_MODELVIEW);
     }
 
-    ////////////////////////////////////////////////////////////
-    void Colorable::setFillColor(const Color &color)
+
+    RenderWindow::~RenderWindow()
+    {}
+
+
+    void RenderWindow::clear()
     {
-        setColor(color);
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+        glLoadIdentity();
     }
 
-    ////////////////////////////////////////////////////////////
-    const Color &Colorable::getFillColor() const
+
+    void RenderWindow::clear(Color &color)
     {
-        return std::cref(getColor());
+        glClearColor(color.r, color.g, color.b, color.a);
+        clear();
+    }
+
+
+    void RenderWindow::setView(const sf3::View &view)
+    {
+        glRotatef(view.m_x_rotation, 1.f, 0.f, 0.f);
+        glRotatef(view.m_y_rotation, 0.f, 1.f, 0.f);
+        glRotatef(view.m_z_rotation, 0.f, 0.f, 1.f);
+
+        sf::Vector3f position = view.getPosition();
+        glTranslatef(-view.m_x_position, view.m_y_position, -view.m_z_position);
+    }
+
+
+    void RenderWindow::resetView()
+    {
+        glLoadIdentity();
     }
 
 } // Namespace sf3

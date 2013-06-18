@@ -22,14 +22,11 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef TRIANGLE_HPP_INCLUDED
-#define TRIANGLE_HPP_INCLUDED
+#ifndef VIEW_HPP_INCLUDED
+#define VIEW_HPP_INCLUDED
 
 // Program specific:
-#include "Vertex.hpp"
 #include "Movable.hpp"
-#include "Rotatable.hpp"
-#include "Colorable.hpp"
 
 // Utilities:
 
@@ -41,36 +38,26 @@
 
 // System specific includes:
 
+
 namespace sf3
 {
 
-    class Triangle
+    class View
     :
-    public Movable,
-    public Rotatable,
-    public Colorable,
-    public sf::Drawable
+    public Movable
     {
     public:
 
-        Triangle();
-        Triangle(const Triangle &triangle);
-        ~Triangle();
+        View(sf::Vector3f position = sf::Vector3f(0.f, 0.f, 0.f));
+        ~View();
 
-        void operator=(const Triangle &triangle);
-        Vertex &operator[](std::size_t pos);
+        void depth(float amount);
+        void rotate(float direction);
 
-        virtual void setFillColor(const sf::Color &color);
-        virtual void setFillColor(const sf3::Color &color);
-        virtual const Color &getFillColor() const;
-
-    private:
-
-        virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
-        Color m_color;
-        Vertex m_vertices[3];
+        float m_x_position, m_y_position, m_z_position;
+        float m_x_rotation, m_y_rotation, m_z_rotation;
     };
 
 } // Namespace sf3
 
-#endif // TRIANGLE_HPP_INCLUDED
+#endif // VIEW_HPP_INCLUDED

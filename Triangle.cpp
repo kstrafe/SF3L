@@ -29,14 +29,14 @@ namespace sf3
 
     Triangle::Triangle()
     :
-    m_position(sf::Vector3f(0.f, 0.f, 0.f))
+    Movable(sf::Vector3f(0.f, 0.f, 0.f))
     {}
 
 
     Triangle::Triangle(const Triangle &triangle)
     :
     m_vertices(triangle.m_vertices),
-    m_position(triangle.m_position)
+    Movable(triangle.m_position)
     {}
 
 
@@ -59,13 +59,7 @@ namespace sf3
     }
 
 
-    void Triangle::setPosition(sf::Vector3f position)
-    {
-        m_position = position;
-    }
-
-
-    void Triangle::setFillColor(sf::Color color)
+    void Triangle::setFillColor(const sf::Color &color)
     {
         m_vertices[0].setColor(color);
         m_vertices[1].setColor(color);
@@ -73,10 +67,23 @@ namespace sf3
     }
 
 
+    void Triangle::setFillColor(const sf3::Color &color)
+    {
+        m_color = color;
+    }
+
+
+    const Color &Triangle::getFillColor() const
+    {
+        return std::ref(m_color);
+    }
+
+
     void Triangle::draw(sf::RenderTarget &target, sf::RenderStates states) const
     {
         glPushMatrix();
         glTranslatef(m_position.x, m_position.y, m_position.z);
+        glRotatef(m_angle, m_rotation.x, m_rotation.y, m_rotation.z);
 
         glBegin(GL_TRIANGLES);
             glColor3f(m_vertices[0].m_color.r, m_vertices[0].m_color.g, m_vertices[0].m_color.b);

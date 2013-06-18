@@ -25,6 +25,10 @@
 #ifndef MOVABLE_HPP_INCLUDED
 #define MOVABLE_HPP_INCLUDED
 
+////////////////////////////////////////////////////////////
+// Headers
+////////////////////////////////////////////////////////////
+
 // Program specific:
 
 // Utilities:
@@ -39,25 +43,72 @@
 namespace sf3
 {
 
+    ////////////////////////////////////////////////////////////
+    /// \brief A base class granting subclasses movable properties
+    ///
+    /// This base class implements simple virtual methods and
+    /// a 3D sf::Vector3f object to handle position.
+    /// The virtual methods are often overloaded in derived
+    /// classes because display lists need to be recompiled.
+    ///
+    /// \param offset     Position to assign to the vertex
+    ///
+    ////////////////////////////////////////////////////////////
     class Movable
     {
     public:
 
-        Movable();
-        Movable(const sf::Vector3f &offset);
+        ////////////////////////////////////////////////////////////
+        /// \brief Default constructor
+        ///
+        /// \param offset     Position to assign to the vertex
+        /// Defaults to (0, 0, 0)
+        ///
+        ////////////////////////////////////////////////////////////
+        Movable(const sf::Vector3f &offset = sf::Vector3f(0.f, 0.f, 0.f));
+
+        ////////////////////////////////////////////////////////////
+        /// \brief Virtual destructor
+        ///
+        ////////////////////////////////////////////////////////////
         virtual ~Movable();
 
-        void move(const sf::Vector3f &offset);
-        void setPosition(const sf::Vector3f &offset);
-        const sf::Vector3f &getPosition() const;
+        ////////////////////////////////////////////////////////////
+        /// \brief Move by a vector
+        ///
+        /// \param offset     Performs a basic addition of the
+        /// existing coordinates.
+        ///
+        ////////////////////////////////////////////////////////////
+        virtual void move(const sf::Vector3f &offset);
+
+        ////////////////////////////////////////////////////////////
+        /// \brief Change absolute position
+        ///
+        /// \param offset     Position to assign to the vertex
+        ///
+        ////////////////////////////////////////////////////////////
+        virtual void setPosition(const sf::Vector3f &value);
+
+        ////////////////////////////////////////////////////////////
+        /// \brief Get the current position
+        ///
+        /// \return The position of the vector
+        ///
+        ////////////////////////////////////////////////////////////
+        virtual const sf::Vector3f &getPosition() const;
 
     protected:
 
-        sf::Vector3f m_position;
+        ////////////////////////////////////////////////////////////
+        // Member data
+        ////////////////////////////////////////////////////////////
+        sf::Vector3f m_position; ///< The current position of an object
 
         friend class Sprite;
     };
 
 } // Namespace sf3
+
 
 #endif // MOVABLE_HPP_INCLUDED

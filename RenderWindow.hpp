@@ -22,14 +22,13 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef TRIANGLE_HPP_INCLUDED
-#define TRIANGLE_HPP_INCLUDED
+#ifndef RENDERWINDOW_HPP_INCLUDED
+#define RENDERWINDOW_HPP_INCLUDED
 
 // Program specific:
-#include "Vertex.hpp"
 #include "Movable.hpp"
-#include "Rotatable.hpp"
-#include "Colorable.hpp"
+#include "Color.hpp"
+#include "View.hpp"
 
 // Utilities:
 
@@ -41,36 +40,34 @@
 
 // System specific includes:
 
+
 namespace sf3
 {
 
-    class Triangle
-    :
-    public Movable,
-    public Rotatable,
-    public Colorable,
-    public sf::Drawable
+    class RenderWindow : public sf::RenderWindow
     {
     public:
 
-        Triangle();
-        Triangle(const Triangle &triangle);
-        ~Triangle();
+        RenderWindow();
 
-        void operator=(const Triangle &triangle);
-        Vertex &operator[](std::size_t pos);
+        template <typename ...Args>
+        RenderWindow(Args ...args)
+        :
+        sf::RenderWindow(std::forward<Args>(args)...)
+        {
+            RenderWindow();
+        }
 
-        virtual void setFillColor(const sf::Color &color);
-        virtual void setFillColor(const sf3::Color &color);
-        virtual const Color &getFillColor() const;
+        virtual ~RenderWindow();
 
-    private:
+        void clear();
+        void clear(Color &color);
 
-        virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
-        Color m_color;
-        Vertex m_vertices[3];
+        void setView(const sf3::View &view);
+        void resetView();
     };
 
 } // Namespace sf3
 
-#endif // TRIANGLE_HPP_INCLUDED
+
+#endif // RENDERWINDOW_HPP_INCLUDED

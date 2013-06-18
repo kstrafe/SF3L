@@ -25,6 +25,10 @@
 #ifndef ROTATABLE_HPP_INCLUDED
 #define ROTATABLE_HPP_INCLUDED
 
+////////////////////////////////////////////////////////////
+// Headers
+////////////////////////////////////////////////////////////
+
 // Program specific:
 #include "Vertex.hpp"
 
@@ -41,29 +45,91 @@
 namespace sf3
 {
 
+    ////////////////////////////////////////////////////////////
+    /// \brief Base class defining a rotatable object
+    ///
+    ////////////////////////////////////////////////////////////
     class Rotatable
     {
     public:
 
-        Rotatable();
-        Rotatable(const float angle, const sf::Vector3f &dispersion);
+        ////////////////////////////////////////////////////////////
+        /// \brief Default constructor
+        ///
+        ////////////////////////////////////////////////////////////
+        Rotatable(const float angle = 0.f, const sf::Vector3f &dispersion = sf::Vector3f(0.f, 0.f, 0.f));
+
+        ////////////////////////////////////////////////////////////
+        /// \brief Default virtual destructor
+        ///
+        ////////////////////////////////////////////////////////////
         virtual ~Rotatable();
 
-        const float &getAngle() const;
-        const sf::Vector3f &getDispersion() const;
+        ////////////////////////////////////////////////////////////
+        /// \brief Return the angle
+        ///
+        /// \return The angle value
+        ////////////////////////////////////////////////////////////
+        virtual const float getAngle() const;
 
-        void setRotation(const float angle);
-        void setRotation(const float angle, const sf::Vector3f &dispersion);
-        void setRotation(const sf::Vector3f &dispersion);
+        ////////////////////////////////////////////////////////////
+        /// \brief Return the dispersion of the angle
+        ///
+        /// \return an sf::Vector3f of rotation
+        ////////////////////////////////////////////////////////////
+        virtual const sf::Vector3f &getDispersion() const;
 
-        void rotate(const float angle);
-        void rotate(const float angle, const sf::Vector3f &dispersion);
-        void rotate(const sf::Vector3f &dispersion);
+        ////////////////////////////////////////////////////////////
+        /// \brief Set the angle of rotation
+        ///
+        /// \param angle        value in range [0.0, 360.0>
+        ////////////////////////////////////////////////////////////
+        virtual void setRotation(const float angle);
+
+        ////////////////////////////////////////////////////////////
+        /// \brief Set the angle of rotation
+        ///
+        /// \param angle        value in range [0.0, 360.0>
+        /// \param dispersion   rotation vector
+        ////////////////////////////////////////////////////////////
+        virtual void setRotation(const float angle, const sf::Vector3f &dispersion);
+
+        ////////////////////////////////////////////////////////////
+        /// \brief Set the angle of rotation
+        ///
+        /// \param dispersion   rotation vector
+        ////////////////////////////////////////////////////////////
+        virtual void setRotation(const sf::Vector3f &dispersion);
+
+        ////////////////////////////////////////////////////////////
+        /// \brief Increase the angle of rotation
+        ///
+        /// \param angle        value in range [0.0, 360.0>
+        ////////////////////////////////////////////////////////////
+        virtual void rotate(const float angle);
+
+        ////////////////////////////////////////////////////////////
+        /// \brief Increase the angle of rotation
+        ///
+        /// \param angle        value in range [0.0, 360.0>
+        /// \param dispersion   rotation vector
+        ////////////////////////////////////////////////////////////
+        virtual void rotate(const float angle, const sf::Vector3f &dispersion);
+
+        ////////////////////////////////////////////////////////////
+        /// \brief Increase the angle of rotation
+        ///
+        /// \param dispersion   rotation vector
+        ////////////////////////////////////////////////////////////
+        virtual void rotate(const sf::Vector3f &dispersion);
 
     protected:
 
-        float m_angle;
-        sf::Vector3f m_rotation;
+        ////////////////////////////////////////////////////////////
+        // Member data
+        ////////////////////////////////////////////////////////////
+        float m_angle; ///< angle of rotation
+        sf::Vector3f m_rotation; ///< vector of rotation
     };
 
 } // Namespace sf3

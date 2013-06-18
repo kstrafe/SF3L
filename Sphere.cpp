@@ -45,12 +45,23 @@ namespace sf3
     }
 
 
+    void Sphere::operator=(const Sphere &sphere)
+    {
+        m_color = sphere.m_color;
+        m_radius = sphere.m_radius;
+
+        glNewList(m_display_list, GL_COMPILE);
+        gluSphere(m_quadric, m_radius, 30000, 30000);
+        glEndList();
+    }
+
+
     void Sphere::setRadius(const float radius)
     {
         m_radius = radius;
 
         glNewList(m_display_list, GL_COMPILE);
-        gluSphere(m_quadric, m_radius, 30000000, 30000000);
+        gluSphere(m_quadric, radius, 30000, 30000);
         glEndList();
     }
 
@@ -63,12 +74,14 @@ namespace sf3
 
     void Sphere::setFillColor(const Color &color)
     {
-
+        m_color = color;
     }
 
 
     void Sphere::setFillColor(const sf::Color &color)
-    {}
+    {
+        m_color = color;
+    }
 
 
     const Color &Sphere::getFillColor() const
@@ -81,6 +94,7 @@ namespace sf3
     {
         glPushMatrix();
             glTranslatef(m_position.x, m_position.y, m_position.z);
+            glColor4f(m_color.r, m_color.g, m_color.b, m_color.a);
             glCallList(m_display_list);
         glPopMatrix();
     }

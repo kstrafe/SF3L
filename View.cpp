@@ -22,55 +22,37 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef TRIANGLE_HPP_INCLUDED
-#define TRIANGLE_HPP_INCLUDED
-
-// Program specific:
-#include "Vertex.hpp"
-#include "Movable.hpp"
-#include "Rotatable.hpp"
-#include "Colorable.hpp"
-
-// Utilities:
-
-// Standard Library components:
-
-// External libraries:
-#include <SFML/Graphics.hpp>
-#include <SFML/OpenGL.hpp>
-
-// System specific includes:
+#include "View.hpp"
 
 namespace sf3
 {
 
-    class Triangle
+    View::View(sf::Vector3f position)
     :
-    public Movable,
-    public Rotatable,
-    public Colorable,
-    public sf::Drawable
+    m_x_position(position.x),
+    m_y_position(position.y),
+    m_z_position(position.z),
+    m_x_rotation(0.f),
+    m_y_rotation(0.f),
+    m_z_rotation(0.f)
+    {}
+
+
+    View::~View()
+    {}
+
+
+    void View::depth(float amount)
     {
-    public:
+        m_x_position += std::sin(m_y_rotation * (3.141592653589793238462643383f / 180.f)) * amount;
+        m_z_position -= std::cos(m_y_rotation * (3.141592653589793238462643383f / 180.f)) * amount;
+    }
 
-        Triangle();
-        Triangle(const Triangle &triangle);
-        ~Triangle();
 
-        void operator=(const Triangle &triangle);
-        Vertex &operator[](std::size_t pos);
-
-        virtual void setFillColor(const sf::Color &color);
-        virtual void setFillColor(const sf3::Color &color);
-        virtual const Color &getFillColor() const;
-
-    private:
-
-        virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
-        Color m_color;
-        Vertex m_vertices[3];
-    };
+    void View::rotate(float direction)
+    {
+        m_y_rotation += direction;
+        m_y_rotation = static_cast<float>(static_cast<int>(m_y_rotation) % 360);
+    }
 
 } // Namespace sf3
-
-#endif // TRIANGLE_HPP_INCLUDED

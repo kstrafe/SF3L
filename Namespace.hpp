@@ -22,55 +22,34 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef TRIANGLE_HPP_INCLUDED
-#define TRIANGLE_HPP_INCLUDED
+#ifndef NAMESPACE_HPP_INCLUDED
+#define NAMESPACE_HPP_INCLUDED
+
+////////////////////////////////////////////////////////////
+// Headers
+////////////////////////////////////////////////////////////
 
 // Program specific:
-#include "Vertex.hpp"
-#include "Movable.hpp"
-#include "Rotatable.hpp"
-#include "Colorable.hpp"
 
 // Utilities:
 
 // Standard Library components:
 
 // External libraries:
-#include <SFML/Graphics.hpp>
-#include <SFML/OpenGL.hpp>
 
 // System specific includes:
 
+////////////////////////////////////////////////////////////
+/// \brief The namespace encapsulating the SF3L library
+///
+/// Everything SF3L related is inside this namespace
+///
+/// \file Namespace.hpp
+/// \brief Template for *.hpp files.
+////////////////////////////////////////////////////////////
 namespace sf3
 {
-
-    class Triangle
-    :
-    public Movable,
-    public Rotatable,
-    public Colorable,
-    public sf::Drawable
-    {
-    public:
-
-        Triangle();
-        Triangle(const Triangle &triangle);
-        ~Triangle();
-
-        void operator=(const Triangle &triangle);
-        Vertex &operator[](std::size_t pos);
-
-        virtual void setFillColor(const sf::Color &color);
-        virtual void setFillColor(const sf3::Color &color);
-        virtual const Color &getFillColor() const;
-
-    private:
-
-        virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
-        Color m_color;
-        Vertex m_vertices[3];
-    };
-
 } // Namespace sf3
 
-#endif // TRIANGLE_HPP_INCLUDED
+
+#endif // NAMESPACE_HPP_INCLUDED

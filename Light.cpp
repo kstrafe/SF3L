@@ -65,7 +65,7 @@ namespace sf3
 //        glPushMatrix();
 //        glLoadIdentity();
 
-        float no_mat[] = {-.1f, -.1f, -.1f, 1.0f};
+        float no_mat[] = {.1f, .1f, .1f, 1.0f};
         float mat_ambient[] = {0.7f, 0.7f, 0.7f, 1.0f};
         float mat_ambient_color[] = {0.8f, 0.8f, 0.2f, 1.0f};
         float mat_diffuse[] = {.1f, .5f, .8f, 1.0f};

@@ -22,83 +22,129 @@
 //
 ////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////
+// Headers
+////////////////////////////////////////////////////////////
 #include "Vertex.hpp"
 
 
 namespace sf3
 {
 
+    ////////////////////////////////////////////////////////////
     Vertex::Vertex
     (
         sf::Vector3f position,
         sf::Color color
     )
     :
-    m_position(position),
-    m_color(color)
-    {}
+    Movable(position),
+    m_color(color),
+    m_displist(glGenLists(cm_display_list_amount))
+    {
+        glNewList(m_displist + cm_color, GL_COMPILE);
+            glColor4f(m_color.r, m_color.g, m_color.b, m_color.a);
+        glEndList();
 
+        glNewList(m_displist + cm_position, GL_COMPILE);
+            glCallList(m_displist + cm_color);
+            glBegin(GL_POINTS);
+                glVertex3f(m_position.x, m_position.y, m_position.z);
+            glEnd();
+        glEndList();
+    }
 
+    ////////////////////////////////////////////////////////////
     Vertex::Vertex(const Vertex &vertex)
     :
-    m_position(vertex.m_position),
-    m_color(vertex.m_color)
-    {}
+    Movable(vertex.m_position),
+    m_color(vertex.m_color),
+    m_displist(glGenLists(cm_display_list_amount))
+    {
+        Vertex();
+    }
 
-
+    ////////////////////////////////////////////////////////////
     void Vertex::operator=(const Vertex &vertex)
     {
         m_position = vertex.m_position;
         m_color = vertex.m_color;
+
+        glNewList(m_displist + cm_color, GL_COMPILE);
+            glColor4f(m_color.r, m_color.g, m_color.b, m_color.a);
+        glEndList();
+
+        glNewList(m_displist + cm_position, GL_COMPILE);
+            glCallList(m_displist + cm_color);
+            glBegin(GL_POINTS);
+                glVertex3f(m_position.x, m_position.y, m_position.z);
+            glEnd();
+        glEndList();
     }
 
-
+    ////////////////////////////////////////////////////////////
     Vertex::~Vertex()
-    {}
+    {
+        glDeleteLists(m_displist, cm_display_list_amount);
+    }
 
+    ////////////////////////////////////////////////////////////
+    void Vertex::move(const sf::Vector3f &position)
+    {
+        m_position += position;
+        Movable::move(position);
 
-    void Vertex::setPosition(sf::Vector3f position)
+        glNewList(m_displist + cm_position, GL_COMPILE);
+            glCallList(m_displist + cm_color);
+            glBegin(GL_POINTS);
+                glVertex3f(m_position.x, m_position.y, m_position.z);
+            glEnd();
+        glEndList();
+    }
+
+    ////////////////////////////////////////////////////////////
+    void Vertex::setPosition(const sf::Vector3f &position)
     {
         m_position = position;
+
+        glNewList(m_displist + cm_position, GL_COMPILE);
+            glCallList(m_displist + cm_color);
+            glBegin(GL_POINTS);
+                glVertex3f(m_position.x, m_position.y, m_position.z);
+            glEnd();
+        glEndList();
     }
 
-
-    void Vertex::setColor(sf::Color color)
-    {
-        m_color.r = color.r / 255.f;
-        m_color.g = color.g / 255.f;
-        m_color.b = color.b / 255.f;
-    }
-
-
-    void Vertex::setColor(Color color)
+    ////////////////////////////////////////////////////////////
+    void Vertex::setColor(const sf::Color &color)
     {
         m_color = color;
+
+        glNewList(m_displist + cm_color, GL_COMPILE);
+            glColor4f(m_color.r, m_color.g, m_color.b, m_color.a);
+        glEndList();
     }
 
+    ////////////////////////////////////////////////////////////
+    void Vertex::setColor(const Color &color)
+    {
+        m_color = color;
 
+        glNewList(m_displist + cm_color, GL_COMPILE);
+            glColor4f(m_color.r, m_color.g, m_color.b, m_color.a);
+        glEndList();
+    }
+
+    ////////////////////////////////////////////////////////////
     const Color &Vertex::getColor() const
     {
         return std::cref(m_color);
     }
 
-
-    const sf::Vector3f &Vertex::getPosition() const
-    {
-        return std::cref(m_position);
-    }
-
-
+    ////////////////////////////////////////////////////////////
     void Vertex::draw(sf::RenderTarget &target, sf::RenderStates states) const
     {
-        glPushMatrix();
-        glColor3f(m_color.r, m_color.g, m_color.b);
-
-        glBegin(GL_POINTS);
-            glVertex3f(m_position.x, m_position.y, m_position.z);
-        glEnd();
-
-        glPopMatrix();
+        glCallList(m_displist + cm_position);
     }
 
 } // Namespace sf3

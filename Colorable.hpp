@@ -25,6 +25,10 @@
 #ifndef COLORABLE_HPP_INCLUDED
 #define COLORABLE_HPP_INCLUDED
 
+////////////////////////////////////////////////////////////
+// Headers
+////////////////////////////////////////////////////////////
+
 // Program specific:
 #include "Color.hpp"
 
@@ -40,17 +44,82 @@
 namespace sf3
 {
 
+    ////////////////////////////////////////////////////////////
+    /// \brief Base class defining an object of different colors
+    ///
+    ////////////////////////////////////////////////////////////
     class Colorable
     {
     public:
 
-        Colorable();
+        ////////////////////////////////////////////////////////////
+        /// \brief Default constructor
+        ///
+        /// Sets the color to white if no argument specified
+        ///
+        /// \param color        The color to assign, default white
+        ////////////////////////////////////////////////////////////
+        Colorable(const Color &color = Color(1.f, 1.f, 1.f, 1.f));
+
+        ////////////////////////////////////////////////////////////
+        /// \brief Virtual destructor
+        ///
+        ////////////////////////////////////////////////////////////
         virtual ~Colorable();
 
-        virtual void setFillColor(const sf::Color &color) = 0;
-        virtual void setFillColor(const Color &color) = 0;
+        ////////////////////////////////////////////////////////////
+        /// \brief Apply a single color
+        ///
+        /// Mostly used to color individual vertices
+        ///
+        /// \param color        The color to assign
+        ////////////////////////////////////////////////////////////
+        virtual void setColor(const sf::Color &color);
 
-        virtual const Color &getFillColor() const = 0;
+        ////////////////////////////////////////////////////////////
+        /// \brief Apply a single color
+        ///
+        /// Mostly used to color individual vertices
+        ///
+        /// \param color        The color to assign
+        ////////////////////////////////////////////////////////////
+        virtual void setColor(const Color &color);
+
+        ////////////////////////////////////////////////////////////
+        /// \brief Return the color value
+        ///
+        /// Mostly used to color individual vertices
+        ///
+        /// \return The sf3::Color struct of the assigned color
+        ////////////////////////////////////////////////////////////
+        virtual const Color &getColor() const;
+
+        ////////////////////////////////////////////////////////////
+        /// \brief Apply a fill color
+        ///
+        /// The fill color can be applied to multi-vertex objects
+        /// such as triangles and rectangles.
+        ///
+        /// \param color        The color to assign
+        ////////////////////////////////////////////////////////////
+        virtual void setFillColor(const sf::Color &color);
+
+        ////////////////////////////////////////////////////////////
+        /// \brief Apply a fill color
+        ///
+        /// The fill color can be applied to multi-vertex objects
+        /// such as triangles and rectangles.
+        ///
+        /// \param color        The color to assign
+        ////////////////////////////////////////////////////////////
+        virtual void setFillColor(const Color &color);
+
+        ////////////////////////////////////////////////////////////
+        /// \brief Get the fill color
+        ///
+        /// \return The color that is assigned as fill
+        ////////////////////////////////////////////////////////////
+        virtual const Color &getFillColor() const;
 
     };
 

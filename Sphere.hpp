@@ -56,6 +56,8 @@ namespace sf3
         Sphere();
         ~Sphere();
 
+        void operator=(const Sphere &sphere);
+
         void setRadius(const float radius);
         const float getRadius() const;
 
